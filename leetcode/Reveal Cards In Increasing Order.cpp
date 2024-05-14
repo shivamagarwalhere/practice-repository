@@ -19,7 +19,6 @@ public:
         // Retrieve the revealed cards in increasing order
         vector<int> ans;
         while(!dq.empty()) {
-            ans.push_back(dq.front());
             dq.pop_front();
         }
         // Return the ordered deck
