@@ -1,0 +1,9 @@
+1. write a script for finding factorial of a given number
+
+2. write a script for finding sum of elements of an array
+
+3. write a script for converting given number to a binary string
+
+4. write a script for creating object and grouping them based on a particular field
+
+5. write a script to get an element by a class and display them

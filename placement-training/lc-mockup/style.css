@@ -1,0 +1,92 @@
+.nav-list {
+    float: right;
+    list-style-type: none;
+}
+
+#navbar-buttons{
+    margin-left:50%;
+}
+
+#sign-title{
+    color:black;
+    position: center;
+    font-family: 'inter';
+    font-size: 26px;
+    position: relative;
+    margin-top: 10%;
+    margin-left: 43%;
+}
+
+#form-table{
+    margin-left: 40%;
+}
+
+.form-input{
+    padding: 5px;
+    width: 10px;
+}
+
+.form-question{
+    color:black;
+    position: center;
+    font-family: 'inter';
+    font-size: 16px;
+}
+
+a {
+    display: block;
+    padding: 15px;
+    padding-left: 30px;
+    text-decoration: none;
+    font-family: 'Inter';
+    color: white;
+  }
+
+#navbar{
+display: flex;
+}
+#home-img{
+    width:600px;
+    height: auto;
+    margin-top: 6%;
+    transform: rotate(-10deg);
+    margin-left: 13%;
+}
+
+#hero-section{
+    display: flex;
+    flex-direction: row;
+}
+
+
+h1{
+    margin-top: 15%;
+    font-family: 'Inter';
+    margin-left:7%;
+    color: white;
+}
+
+h2{
+    font-weight: lighter;
+    font-family: 'Inter';
+    font-size: medium;
+    margin-left: 10%;
+    margin-right:50%;
+    word-wrap: normal;
+    text-align: center;
+    color: white;
+}
+
+button{
+    margin-top: 5%;
+    margin-left: 20%;
+    padding: 12px;
+    font-family: 'inter';
+    font-weight: lighter;
+    background-color: #1da09c;
+    color: white;
+    border-radius: 15px;
+    border: none;
+}
+
+  
