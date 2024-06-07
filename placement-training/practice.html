@@ -6,19 +6,54 @@
         <title>JS Practice</title>
     </head>
     <body>
-        <p id="a"></p>
-        <script>
-            let num = 5
-            let factorial = 1
-            for (let index = 1; index <= num; index++) {
-                factorial *=index
-            }
-            document.write("Factorial of the number is: ", factorial)
+        <!-- <script>
+            // let num = 5
+            // let factorial = 1
+            // for (let index = 1; index <= num; index++) {
+            //     factorial *=index
+            // }
+            // document.write("Factorial of the number is: ", factorial)
             
-            const users = [{email: "some@gmail.com", firstname: 'shivam', role: 'Intern'}, {email: "person@microsoft.com", firstname: 'ayush', role: 'Intern'}]
-            const x = document.getElementsByClassName("a");
-            document.write(x.item)
+            // const users = [{email: "some@gmail.com", firstname: 'shivam', role: 'Intern'}, {
+                // email: "person@microsoft.com", firstname: 'ayush', role: 'Intern'}]
+            // const x = document.getElementsByClassName("a");
+            // document.write(x.item)
+            const arr = ['shivam', 'rohan', 'ayush', 'megh']
+            for (let i in arr){
+                document.write(<li>arr[i]</li>);
+            }
+        </script> -->
 
+        <!-- <script>
+            // const txt =  `{"student":["Shivam","Rohan","Ayush"],
+            //                 "batch:": ["Batch 2", "Batch 3", "Batch Last"]}`;
+            // const obj1 = JSON.parse(txt);
+            // alert(obj1.student);
+            const data = `{"name":"Shivam", "DOB": "2002-12-30", "fun":"function(){return this.name + this.DOB;}"}`;
+            const obj2  = JSON.parse(data);
+            obj2.fun = eval('('+obj2.fun+')')
+            alert(obj2.fun());
+        </script> -->
+        <button onclick="load()">clickMe</button>
+        <script>
+            function load()
+            {//connection request
+            const obj=new XMLHttpRequest();
+            const objforPOST = {name: 'ROHAN', age: 20};
+            const ofPOST = JSON.stringify(objforPOST);
+            //call function
+            obj.onload = function(){
+                // FOR GET:
+                // const a = obj.responseText;
+                // document.write(a)
+                alert(ofPOST);
+
+            }
+            //open the request
+            //FOR GET: obj.open("GET", "http://localhost:3000/age", true);
+            obj.open("POST", "http://localhost:3000/age", true);
+            //send
+            obj.send(ofPOST); }
         </script>
     </body>
 </html>

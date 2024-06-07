@@ -23,3 +23,10 @@ console.log(factorial.toString(2))
 //write a script to get an element by a class and display them
 const x = document.getElementsByClassName("a");
 document.write(x.item)
+
+//write a script to display todays date
+const a = new Date(['month', 6], ['date', 5], ['year', 2024]);
+for (let i of a){
+    document.write(i[0]+ "-" + i[i])
+}
+//write a script to display given date in UTC format, IST format and ___ format. get the month, date and year.
