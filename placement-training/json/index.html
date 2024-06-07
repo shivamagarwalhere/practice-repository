@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JSON Practice</title>
+    </head>
+    <body>
+            <button onclick="load()">View Students Data</button>
+            <div id="table-container"></div>
+            <script>
+            function load(){
+                const connection = new XMLHttpRequest();
+                connection.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        let obj = JSON.parse(this.responseText);
+                        const students = obj.students;
+                        const container = document.getElementById("table-container")
+                        const table = document.createElement("table")
+                        let studentTable = "<tr><th>Name</th><th>Age</th><th>Marks</th></tr>";
+                        for (let i of students){
+                            studentTable += "<tr><td>${`student.name`}</td><td>${`student.age`}</td><td>${`student.marks`}</td></tr>";
+                        }
+                        table.innerHTML = studentTable
+                        container.innerHTML =' ';
+                        container.appendChild(table)
+                    };
+                };
+            connection.open("GET", "http://localhost:3000/students", true);
+            connection.send();
+            }                    
+            </script>
+    </body>
+</html>
