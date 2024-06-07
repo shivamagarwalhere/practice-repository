@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 1 Text File</title>
+</head>
+<body>
+    <button id="button">Get Text File</button>
+    <br><br>
+    <div id="text"></div>
+    <script>
+        //create event listener
+        document.getElementById('button').addEventListener('click', loadText);
+
+        function loadText(){
+            //create XHR Object
+            let xhr = new XMLHttpRequest();
+            //Function to make the request, type of request and the url
+            xhr.open('GET', 'sample.txt', true);
+
+            //Optional- used for loaders (loading screen)
+            xhr.onprogress = function(){
+                console.log('READYSTATE: ', xhr.readyState)
+            }
+            
+            xhr.onload = function(){
+                if (this.status == 200){ //HTTP Statuses: 200 -> OK, 403-> Forbidden, 404 -> Not Found
+                //console.log(this.responseText);
+                    document.getElementById('text').innerHTML = this.responseText
+                }
+            }
+
+            //for errors
+            xhr.onerror = function(){
+                console.log("error occured...")
+            }
+            //Sends request
+            xhr.send()
+
+            //old way of doing this instead of onload was the onreadystatechange, in this we need to also check the ready state values along with status
+            //some ready state values: 0-> request not initialized, 1-> server connection established, 2-> request recieved, 3->processing request, 4-> request finished and response is ready
+            // xhr.onreadystatechange = function(){
+            //     if (this.readyState==4 && this.status == 200)
+            //     {
+            //         console.log(this.responseText);
+            //     }
+            // }
+            // the difference is that onload does not run only unless ready state is not 4, so that check is not required.
+        }
+    </script>
+</body>
+</html>

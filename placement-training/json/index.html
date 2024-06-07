@@ -8,27 +8,32 @@
     <body>
             <button onclick="load()">View Students Data</button>
             <div id="table-container"></div>
-            <script>
-            function load(){
-                const connection = new XMLHttpRequest();
-                connection.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200){
-                        let obj = JSON.parse(this.responseText);
-                        const students = obj.students;
-                        const container = document.getElementById("table-container")
-                        const table = document.createElement("table")
-                        let studentTable = "<tr><th>Name</th><th>Age</th><th>Marks</th></tr>";
-                        for (let i of students){
-                            studentTable += "<tr><td>${`student.name`}</td><td>${`student.age`}</td><td>${`student.marks`}</td></tr>";
-                        }
-                        table.innerHTML = studentTable
-                        container.innerHTML =' ';
-                        container.appendChild(table)
-                    };
-                };
-            connection.open("GET", "http://localhost:3000/students", true);
-            connection.send();
-            }                    
-            </script>
     </body>
+    <script>
+        function load(){
+            const connection = new XMLHttpRequest();
+            connection.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200){
+                    let obj = JSON.parse(this.responseText);
+                    let students = obj.students;
+                    console.log(students)
+                    const container = document.getElementById("table-container")
+                    let table = document.createElement("table")
+                    let studentTable = "<tr><th>Name</th><th>Age</th><th>Marks</th></tr>";
+                    for (var i = 0; i<students.length; i++){
+                    var row = `<tr>
+                        <td>${students[i].name}</td>
+                        <td>${students[i].age}</td>
+                        <td>${students[i].marks}</td>
+                        </tr>`
+                    }
+                    table.innerHTML = studentTable
+                    container.innerHTML ='';
+                    container.appendChild(table)
+                };
+            };
+        connection.open("GET", "http://localhost:3000/students", true);
+        connection.send();
+        }                    
+        </script>
 </html>

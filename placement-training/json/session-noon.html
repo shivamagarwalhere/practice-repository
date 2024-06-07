@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>Some Object Functions</title>
+    </head>
+    <body>
+        <script>
+            // "use strict"
+            // const a = {
+            //     name: "Shivam",
+            //     age: "21"
+            // };
+
+            // a.name="Shiv"
+            // //Object.freeze(a);
+            // //freeze wont allow any operations
+            // //Object.seal(a);
+            // //seal only allows updating no insertion or deletion
+            // //a.dob="2002-12-30";
+            // Object.defineProperty(a,"native",{value: "Indian"});
+            // for (let i in a )
+            // {
+            //     document.write(a[i]+" ")
+            // }
+
+
+            //take a json file containing names, request for data, respond in a sorted manner.
+
+            
+            const a = [["name", "shivam"], ["address", "jaipur"]]
+            const obj = Object.fromEntries(a)
+            for (let i in obj){
+                document.write(obj[i]+" ")
+            }
+        </script>
+    </body>
+</html>
+

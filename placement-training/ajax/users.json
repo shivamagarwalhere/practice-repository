@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "shivam",
+        "email": "agarwal@versure.in"
+    },
+    {
+        "id": 2,
+        "name": "ayush",
+        "email": "rathore@honeywell.com"
+    },
+    {
+        "id": 3,
+        "name": "rohan",
+        "email": "middela@tdp.ap"
+    },
+    {
+        "id": 4,
+        "name": "megh",
+        "email": "prajapati@bpcl.in"
+    }
+]
