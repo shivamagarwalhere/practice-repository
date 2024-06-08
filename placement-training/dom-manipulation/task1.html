@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task-1</title>
+</head>
+<body>
+    <!--Take various fields of a form using radioboxes, list, etc etc and then display all of them in a table after clicking submit button-->
+    <form id="fm">
+        <label for="fname">First Name:</label>
+        <input type = "text" id="fname" name="fname"><br><br>
+        <label for="lname">Last Name:</label>
+        <input type = "text" id="lname" name="lname"><br><br>
+        <label for="gender">Choose Gender:</label>
+        <input type="radio" id="male" name="gender" value="Male">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="Female">
+        <label for="female">Female</label><br><br>
+        <label for="skills">Select Skills that apply:</label><br>
+        <input type="checkbox" id="skill1" name="skill" value="Web Development">
+        <label for="skill1">Web Development</label><br>
+        <input type="checkbox" id="skill2" name="skill" value="DevOps">
+        <label for="skill2">DevOps</label><br>
+        <input type="checkbox" id="skill3" name="skill" value="AWS">
+        <label for="skill3">AWS</label><br><br>
+    </form>
+    <button id="btnn" onclick="formPrinter()">Submit Data</button>
+    <table id="form-printer"></table>
+    <script>
+        function formPrinter(){
+            //document.write("Submitted Data:")
+            let fpt = document.getElementById('form-printer')
+            // fpt.innerHTML = "<tr><th>Submitted Data</th></tr>"
+            
+            let firstName = document.getElementById('fname').value;
+            let lastName = document.getElementById('lname').value;
+            let selectedGender = document.querySelector('input[name="gender"]:checked').value;
+            let selectedSkills = []
+            for (const checkbox of document.querySelectorAll("input[name='skill']:checked")){
+                selectedSkills.push(checkbox.value);
+            }
+
+            // let tableRow1 = document.createElement('tr');
+            // let nameTag = document.createElement('td');
+            // nameTag.textContent = `Name`;
+            // let nameCell = document.createElement('td');
+            // nameCell.textContent = `${firstName} ${lastName}`;
+
+            // tableRow1.appendChild(nameTag);
+            // tableRow1.appendChild(nameCell);
+            // fpt.appendChild(tableRow1);
+
+            // let tableRow2 = document.createElement('tr');
+            // let genderTag = document.createElement('td');
+            // genderTag.textContent = `Gender`;
+            // let genderCell = document.createElement('td');
+            // genderCell.textContent = `${selectedGender}`;
+
+            // tableRow2.appendChild(genderTag);
+            // tableRow2.appendChild(genderCell);
+            // fpt.appendChild(tableRow2);
+
+            // let tableRow3 = document.createElement('tr');
+            // let skillsTag = document.createElement('td');
+            // skillsTag.textContent = `Skills`;
+            // let skillsCell = document.createElement('td');
+            // skillsCell.textContent = `${selectedSkills.join(', ')}`;
+
+            // tableRow3.appendChild(skillsTag);
+            // tableRow3.appendChild(skillsCell);
+            // fpt.appendChild(tableRow3);
+
+            fpt.innerHTML = `<tr><th colspan = "2"> Submitted Data </th></tr><tr><td>Name:</td><td>${firstName} ${lastName}</td></tr><tr><td>Gender:</td><td>${selectedGender}</td></tr><tr><td>Skills:</td><td>${selectedSkills}</td></tr>`;
+
+            return false;
+        }
+    </script>
+</body>
+</html>

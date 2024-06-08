@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Event Listeners 2</title>
+</head>
+<body>
+    <button id="btn" onclick="fun()">click</button>
+    <p id="a"></p>
+    <script>
+    const a ={
+        fname: "Rajesh", lname: "Kumar",
+        fun: function(){return `${this.fname} ${this.lname}`}
+    }
+    const b={
+        fname: "Naresh", lname: "Verma",
+    }
+    //const txt = a.fun.call(b) //-> this is callback
+    //alert(txt) 
+    
+    //const txt = a.fun.apply(b) /-> this is apply
+    //alert(txt)
+    //alert(Math.max.apply(null, [1,2,5,3,6]));
+
+    //-> this is bind/binding
+    const x = a.fun.bind(b)
+    alert(x)
+
+    //Self invoked functions, function closures/closes something
+    add =(function(){
+        let c = 0;
+        return function plus(){c+=1; return c;}
+    })();
+
+    function fun(){
+        document.getElementById('a').innerHTML=add();
+    }
+
+    </script>
+</body>
+</html>

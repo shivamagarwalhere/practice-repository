@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+</head>
+<body>
+    <h1 id="abc">Welcome to Placement Training</h1>
+    <p id="demo">SRM</p>
+    <form id="fm" action="sample.txt" onsubmit="return myval()">
+        <input type = "text" id="a" name = "entry" required>
+        <input type = "submit" value = "enter">
+        <button id="btn" onclick="myfunc()">Click me</button>
+    </form>
+    <script>
+        document.getElementById('abc').innerHTML  =  "Shivam Agarwal"
+        document.getElementById('abc').style.color = 'red'
+        const x = document.getElementById('abc')
+        document.getElementById('demo').innerHTML = x.innerHTML
+        const y = document.getElementsByTagName("p")
+        alert(y[0].innerText)
+        
+        function myfunc(){
+        document.getElementById('btn').innerHTML = "clicked :)"}
+
+        function myval(){
+            const x = document.forms["fm"]["a"].value;
+            if (x==""){alert("hello"); return false;}
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM - Event Listeners</title>
+</head>
+<body>
+  <h1 id="head-text">Different Relegions of India</h1>
+  <script>
+    const a = document.getElementById('head-text');
+    a.addEventListener("click", () => {
+      a.style.fontFamily = 'inter';
+      a.style.color = "cyan";
+      console.log("success 200");
+    });
+
+    a.addEventListener("mouseover", ()=>{
+        a.innerHTML = "Hindu"
+        a.style.color="orange";
+    });
+
+    a.addEventListener("mouseleave", ()=>{
+        a.innerHTML = "Muslim"
+        a.style.color="green";
+    });
+
+  </script>
+</body>
+</html>
