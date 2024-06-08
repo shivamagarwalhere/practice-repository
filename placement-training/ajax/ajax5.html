@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 4 - Ascending Table</title>
+    <style>
+        tr, td{
+            border: 1px solid;
+            padding: 10px;
+            font-size: 'inter';
+        }
+    </style>
+</head>
+<body>
+    <button id="button">Show details in ascending order</button>
+    <br><br>
+    <table id="table-container"></table>
+    <script>
+        document.getElementById('button').addEventListener('click', createTable);
+        function createTable()
+        {let xhr = new XMLHttpRequest()
+        xhr.open('GET', 'users.json', true)
+
+        xhr.onload = function() {
+            if (this.readyState = 200){
+                let users = JSON.parse(this.responseText)
+                output = ''
+
+                users = users.sort((a, b) =>{
+                    if (a.name < b.name)
+                    return -1
+                });
+
+                for (let i in users){
+                    output+= '<tr><td>'+users[i].id+'</td><td>'+users[i].name+'</td><td>'+users[i].email+'</td></tr>'
+                }
+
+                document.getElementById('table-container').innerHTML = output
+            }
+        }
+
+        xhr.send()};
+    </script>
+</body>
+</html>
