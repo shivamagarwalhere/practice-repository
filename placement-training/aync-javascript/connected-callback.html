@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Callback</title>
+</head>
+<body>
+    <my-tag></my-tag>
+    <style>
+        h1{color: blue;}
+    </style>
+    <h1> shivam </h1>
+    <script>
+        class myTag extends HTMLElement{
+            constructor(){
+                super();
+                const shadow = this.attachShadow({mode:"open"})
+                }
+                connectedCallback(){
+                    this.shadowRoot.innerHTML = `<style> h1{color: red;} </style><h1>shivam</h1`;
+                }
+            }
+        customElements.define("my-tag",  myTag)
+    </script>
+</body>
+</html>
