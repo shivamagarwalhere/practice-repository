@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Profile</title>
+    <style>
+        #profile-container{
+            height: 400px;
+            width: 350px;
+            background-color: lightgray;
+            border: 2px solid black;
+        }
+        #profile-image{
+            width: 75px;
+            height:75px;
+            position: relative;
+            margin: 30% 40%;
+        }
+        #profile-name{
+            font-family: 'inter';
+            position: relative;
+            margin-top: -10%;
+            text-align: center;
+        }
+        p{
+            font-family: 'inter';
+            text-align: center;
+            color: black;
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+    <form method="GET" action="profile.html" onsubmit="return fetchData(event);">
+        <label for="username">Enter your github username: </label>
+        <input type="text" id="profile-username">
+        <input type="submit" value="Submit" name="Submit">
+    </form>
+    <div id="profile-container">
+        <img id = "profile-image" src="LeetCode_Logo_black_with_text.svg.png">
+        <h1 id="profile-name">Name</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illum, culpa!</p>
+    </div>
+    <script>
+        function fetchData(event){
+            event.preventDefault();
+        const xhr = new XMLHttpRequest()
+        const addr = `https://api.github.com/users/${document.getElementById('profile-username').value}`
+        xhr.open('GET', addr, true)
+        xhr.onload = function(){
+            if (this.status == 200){
+                let data = JSON.parse(this.responseText)
+                document.getElementById('profile-image').src = data.avatar_url
+                document.getElementById('profile-name').innerHTML = data.name
+                document.querySelector('p').innerHTML = data.bio
+            }
+        }
+
+        xhr.send()}
+    </script>
+</body>
+</html>
