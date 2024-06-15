@@ -17,6 +17,7 @@
   "author": "Shivam Agarwal",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "mongoose": "^8.4.1",
     "nanoid": "^5.0.7",
