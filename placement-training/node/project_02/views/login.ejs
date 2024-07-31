@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        #rectangle{
+            width: 100%;
+            height: 110px;
+            background-color: #391778;
+        }
+        body{
+            margin: 0px;
+            font-family: 'inter';
+        }
+        h1{
+            background-color: #391778;
+            color: white;
+            text-align: center;
+            margin-top: 0%;
+            padding-bottom: 20px;
+        }
+        h2{
+            text-align: center;
+        }
+        #image-container{
+            background-color: #391778;
+            text-align: center;
+        }
+        #logo{
+            background-color: #391778;
+            align-items: center;
+            margin-bottom: 0%;
+        }
+        #label-container{
+            text-align: center;
+        }
+        #form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Adjust as needed */
+        }
+
+        /* Left-align labels */
+        label {
+            text-align: left;
+            display: block;
+        }
+
+        /* Add margin to input boxes */
+        input {
+            margin-bottom: 10px; 
+            width: 100%;
+            padding: 5px;/* Adjust as needed */
+        }
+        button{
+            background-color: #391778;
+            text-align: center;
+            padding: 5px;
+            width: 110%;
+            color: white;
+        
+        }
+    </style>
+</head>
+<body>
+    <div id="rectangle"></div>
+    <div id="image-container">
+    <img id="logo" src="https://img.icons8.com/wired/100/ffffff/link--v1.png"/>
+    </div>
+    <h1>URL Shortener</h1>
+    <h2>Login</h2>
+    <div id="form-container">
+        <form action="/user/login" method="post">
+            <label>Email</label>
+            <input type="email" required name="email">
+            <br>
+            <label>Password</label>
+            <input type="password" required name="password">
+            <br>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
