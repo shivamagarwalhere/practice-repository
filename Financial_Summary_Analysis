@@ -1,0 +1,292 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/shivamagarwalhere/practice-repository/blob/main/Financial_Summary_Analysis\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "f3f8fffc"
+      },
+      "source": [
+        "# Financial Report Analysis\n",
+        "This project automates the extraction of insights from financial document images using Google's Gemma models."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4e022fe0",
+        "outputId": "64404f0f-fccb-41d1-bd19-71f90faad053"
+      },
+      "source": [
+        "!pip install -q -U google-generativeai Pillow"
+      ],
+      "execution_count": 1,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[?25l   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m0.0/7.1 MB\u001b[0m \u001b[31m?\u001b[0m eta \u001b[36m-:--:--\u001b[0m\r\u001b[2K   \u001b[91m━━━━━\u001b[0m\u001b[91m╸\u001b[0m\u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.0/7.1 MB\u001b[0m \u001b[31m30.2 MB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\r\u001b[2K   \u001b[91m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[91m╸\u001b[0m \u001b[32m7.1/7.1 MB\u001b[0m \u001b[31m112.4 MB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\r\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m7.1/7.1 MB\u001b[0m \u001b[31m76.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "gradio 5.50.0 requires pillow<12.0,>=8.0, but you have pillow 12.2.0 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0m"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "702596c5"
+      },
+      "source": [
+        "### 1. Setup API Key and Model\n",
+        "Please ensure you have added your `GOOGLE_API_KEY` to the Colab Secrets (the key icon on the left sidebar)."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9ca3a35d",
+        "outputId": "0161bd25-e605-4cdb-ffe7-eaa46527f4ed"
+      },
+      "source": [
+        "import google.generativeai as genai\n",
+        "from google.colab import userdata\n",
+        "from PIL import Image\n",
+        "import os\n",
+        "\n",
+        "try:\n",
+        "    GOOGLE_API_KEY = userdata.get('GEMINI_API_KEY')\n",
+        "    genai.configure(api_key=GOOGLE_API_KEY)\n",
+        "    print(\"API Key configured successfully.\")\n",
+        "except Exception as e:\n",
+        "    print(f\"Error: {e}. Please ensure 'GEMINI_API_KEY' is in Colab Secrets.\")\n",
+        "\n",
+        "model = genai.GenerativeModel('gemma-4-26b-a4b-it')"
+      ],
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.12/dist-packages/google/colab/_import_hooks/_hook_injector.py:55: FutureWarning: \n",
+            "\n",
+            "All support for the `google.generativeai` package has ended. It will no longer be receiving \n",
+            "updates or bug fixes. Please switch to the `google.genai` package as soon as possible.\n",
+            "See README for more details:\n",
+            "\n",
+            "https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md\n",
+            "\n",
+            "  loader.exec_module(module)\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "API Key configured successfully.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 601
+        },
+        "id": "8d1de4a9",
+        "outputId": "5b9d52ea-10bf-4f91-f86f-245a0f12ebd1"
+      },
+      "source": [
+        "# List available models to find the correct identifier\n",
+        "print(\"--- Available Models Supporting GenerateContent ---\")\n",
+        "for m in genai.list_models():\n",
+        "    if 'generateContent' in m.supported_generation_methods:\n",
+        "        print(f\"Model Name: {m.name}\")"
+      ],
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- Available Models Supporting GenerateContent ---\n",
+            "Model Name: models/gemini-2.5-flash\n",
+            "Model Name: models/gemini-2.5-pro\n",
+            "Model Name: models/gemini-2.0-flash\n",
+            "Model Name: models/gemini-2.0-flash-001\n",
+            "Model Name: models/gemini-2.0-flash-lite-001\n",
+            "Model Name: models/gemini-2.0-flash-lite\n",
+            "Model Name: models/gemini-2.5-flash-preview-tts\n",
+            "Model Name: models/gemini-2.5-pro-preview-tts\n",
+            "Model Name: models/gemma-4-26b-a4b-it\n",
+            "Model Name: models/gemma-4-31b-it\n",
+            "Model Name: models/gemini-flash-latest\n",
+            "Model Name: models/gemini-flash-lite-latest\n",
+            "Model Name: models/gemini-pro-latest\n",
+            "Model Name: models/gemini-2.5-flash-lite\n",
+            "Model Name: models/gemini-2.5-flash-image\n",
+            "Model Name: models/gemini-3-pro-preview\n",
+            "Model Name: models/gemini-3-flash-preview\n",
+            "Model Name: models/gemini-3.1-pro-preview\n",
+            "Model Name: models/gemini-3.1-pro-preview-customtools\n",
+            "Model Name: models/gemini-3.1-flash-lite-preview\n",
+            "Model Name: models/gemini-3-pro-image-preview\n",
+            "Model Name: models/nano-banana-pro-preview\n",
+            "Model Name: models/gemini-3.1-flash-image-preview\n",
+            "Model Name: models/lyria-3-clip-preview\n",
+            "Model Name: models/lyria-3-pro-preview\n",
+            "Model Name: models/gemini-3.1-flash-tts-preview\n",
+            "Model Name: models/gemini-robotics-er-1.5-preview\n",
+            "Model Name: models/gemini-robotics-er-1.6-preview\n",
+            "Model Name: models/gemini-2.5-computer-use-preview-10-2025\n",
+            "Model Name: models/deep-research-max-preview-04-2026\n",
+            "Model Name: models/deep-research-preview-04-2026\n",
+            "Model Name: models/deep-research-pro-preview-12-2025\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "74454f87"
+      },
+      "source": [
+        "### 2. Load Financial Images\n",
+        "We will load the two images from the `/content/` directory."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "00f3a7d3",
+        "outputId": "b5c29c37-0a24-4a59-97bf-5ffaa07db6df"
+      },
+      "source": [
+        "image_paths = ['/content/figures_at_a_glance.png', '/content/balance_sheet.png']\n",
+        "images = []\n",
+        "\n",
+        "for path in image_paths:\n",
+        "    if os.path.exists(path):\n",
+        "        img = Image.open(path)\n",
+        "        images.append(img)\n",
+        "        print(f\"Loaded: {path}\")\n",
+        "    else:\n",
+        "        print(f\"Warning: {path} not found. Please upload it to the content folder.\")"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Loaded: /content/figures_at_a_glance.png\n",
+            "Loaded: /content/balance_sheet.png\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "474ba9ed"
+      },
+      "source": [
+        "### 3. Generate Financial Analysis\n",
+        "Now we prompt the model to analyze the images and provide a structured summary."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "b17bdaf2",
+        "outputId": "2b482e6a-efb0-41c8-c64e-c4fd8e560fac"
+      },
+      "source": [
+        "from IPython.display import display, Markdown\n",
+        "\n",
+        "prompt = \"\"\"\n",
+        "Analyze the provided financial document images and provide a structured summary including:\n",
+        "1. Key Financial Metrics (Revenue, Net Income, EPS, Growth Trends).\n",
+        "2. Balance Sheet Highlights (Assets, Liabilities, Equity).\n",
+        "3. Credit Quality and Operational Performance.\n",
+        "4. Strategic and Operational Updates.\n",
+        "5. Market Conditions and Outlook.\n",
+        "6. Identification of risks or anomalies found in graphs and charts.\n",
+        "\n",
+        "Format the output to be professional and suitable for investors and analysts, similar to a quarterly report summary.\n",
+        "\"\"\"\n",
+        "\n",
+        "if images:\n",
+        "    response = model.generate_content([prompt] + images)\n",
+        "    print(\"--- Financial Report Analysis ---\\n\")\n",
+        "    display(Markdown(response.text))\n",
+        "else:\n",
+        "    print(\"No images available to analyze. Please upload 'figures_at_a_glance.png' and 'balance_sheet.png' to the /content/ folder.\")"
+      ],
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- Financial Report Analysis ---\n",
+            "\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Markdown object>"
+            ],
+            "text/markdown": "\nTwo images of a financial report.\n        *   *Image 1:* \"Figures at a glance\" – bar charts for Net profit/(loss), Return on equity, Earnings per share, Cost/income ratio, Cost of risk, Net interest margin, CET1 ratio (Basel III), CET1 ratio (Basel IV), and Leverage ratio (CRR2).\n        *   *Image 2:* \"Balance sheet\" – Condensed consolidated statement of financial position for three dates: 30 September 2024, 30 June 2024, and 31 December 2023 (all in millions).\n\n        1.  Key Financial Metrics.\n        2.  Balance Sheet Highlights.\n        3.  Credit Quality and Operational Performance.\n        4.  Strategic and Operational Updates.\n        5.  Market Conditions and Outlook.\n        6.  Identification of risks or anomalies.\nProfessional, investor-friendly, quarterly report style.\n\n    *   **Image 1 Analysis (Performance Metrics):**\n        *   *Net Profit (EUR million):* Q3 23 (759), Q4 23 (545), Q1 24 (674), Q2 24 (642), Q3 24 (690). *Trend:* Volatile but recovering/stabilizing in 2024.\n        *   *Return on Equity (ROE) (%):* Q3 23 (13.6), Q4 23 (9.5), Q1 24 (11.6), Q2 24 (10.8), Q3 24 (11.6). *Target:* 9-10%. *Trend:* Meeting/exceeding target.\n        *   *EPS (EUR):* Q3 23 (0.85), Q4 23 (0.60), Q1 24 (0.76), Q2 24 (0.73), Q3 24 (0.78). *Trend:* Recovering from Q4 23 dip.\n        *   *Cost/Income Ratio (%):* Q3 23 (55.5), Q4 23 (71.6), Q1 24 (57.2), Q2 24 (58.2), Q3 24 (59.2). *Target:* ~60%. *Trend:* Higher in Q4 23, currently slightly above target but trending near it.\n        *   *Cost of Risk (bps):* Q3 23 (0), Q4 23 (-13), Q1 24 (-1), Q2 24 (-4), Q3 24 (-2). *Observation:* Significant negative cost of risk in Q4 23 (reversals/provisions release).\n        *   *Net Interest Margin (NIM) (bps):* Q3 23 (154), Q4 23 (152), Q1 24 (162), Q2 24 (162), Q3 24 (165). *Trend:* Improving/increasing.\n        *   *CET1 Ratio (Basel III):* Q3 23 (15.0), Q4 23 (14.3), Q1 24 (13.8), Q2 24 (13.8), Q3 24 (14.1).\n        *   *CET1 Ratio (Basel IV):* Q3 23 (16), Q4 23 (15), Q1 24 (14), Q2 24 (14), Q3 24 (14). *Target:* 13.5%.\n        *   *Leverage Ratio (CRR2):* Q3 23 (5.2), Q4 23 (5.3), Q1 24 (5.2), Q2 24 (5.3), Q3 24 (5.5).\n\n    *   **Image 2 Analysis (Balance Sheet):**\n        *   *Assets (Millions):*\n            *   30 Sep 24: 403,771\n            *   30 Jun 24: 393,404\n            *   31 Dec 23: 377,909\n            *   *Growth:* Steady increase in total assets.\n        *   *Key Asset components (30 Sep 24):*\n            *   Cash: 31,652 (decreasing from 53,656 in Dec 23).\n            *   Loans & advances to customers: 259,603 (increasing from 245,935 in Dec 23).\n        *   *Liabilities (Millions):*\n            *   30 Sep 24: 377,961\n            *   30 Jun 24: 368,408\n            *   31 Dec 23: 353,741\n        *   *Key Liability components (30 Sep 24):*\n            *   Due to customers: 262,712 (increasing).\n            *   Issued debt: 71,332.\n        *   *Equity (Millions):*\n            *   30 Sep 24: 25,810\n            *   30 Jun 24: 24,995\n            *   31 Dec 23: 24,168\n            *   *Trend:* Increasing equity.\n\n    *   *Section 1: Key Financial Metrics.* Pull from \"Figures at a glance\". Highlight Q3 24 vs previous periods. Focus on Net Profit, EPS, and ROE.\n    *   *Section 2: Balance Sheet Highlights.* Pull from the \"Balance sheet\". Focus on Total Assets, Loans/Advances (growth indicator), and Total Equity.\n    *   *Section 3: Credit Quality and Operational Performance.* Use Cost of Risk and Cost/Income ratio. Mention NIM.\n    *   *Section 4: Strategic and Operational Updates.* Use Capital Ratios (CET1/Leverage). Mention they are meeting targets. Note the \"pro-forma\" disclaimer regarding CET1.\n    *   *Section 5: Market Conditions and Outlook.* Use NIM trends and general asset growth. (Note: The document doesn't explicitly state \"market conditions,\" so I must infer from the data trends, e.g., rising NIM suggests a favorable interest rate environment).\n    *   *Section 6: Identification of risks or anomalies.* Look at the Cost of Risk spike (negative value in Q4 23) and the Cost/Income ratio spike.\n\n    *   *Check:* Did I include the targets? Yes (ROE 9-10%, Cost/Income ~60%, CET1 Basel IV 13.5%).\n    *   *Check:* Are the numbers accurate? Yes.\n    *   *Check:* Is the tone professional? Use terms like \"robust,\" \"steady expansion,\" \"stabilization,\" \"pro-forma.\"\n    *   *Correction:* Don't just list numbers; interpret them. Instead of \"Net profit was 690,\" say \"Net profit showed a recovery to EUR 690 million in Q3 24.\"\n\n    *   Organize with clear headers.\n    *   Use bullet points for readability.\n    *   Ensure the distinction between Basel III and Basel IV is clear.\n# Financial Performance Summary: Q3 2024 Results\n\n**To:** Investors and Financial Analysts  \n**Date:** Reporting Period ending 30 September 2024  \n**Subject:** Quarterly Financial Performance and Position Overview\n\n---\n\n### 1. Key Financial Metrics\nThe third quarter of 2024 demonstrates a period of stabilization and recovery in profitability following fluctuations in late 2023.\n\n* **Net Profit:** Reported at **EUR 690 million** for Q3 24, showing an upward trend compared to Q2 24 (EUR 642 million) and a significant recovery from the Q4 23 low of EUR 545 million.\n* **Earnings Per Share (EPS):** EPS reached **EUR 0.78**, up from EUR 0.73 in the previous quarter, indicating consistent value delivery to shareholders.\n* **Return on Equity (ROE):** ROE stands at **11.6%**, comfortably exceeding the group's strategic target range of **9–10%**.\n* **Growth Trends:** While net profit experienced volatility in 2023, the 2024 trajectory shows steady improvement in both bottom-line figures and shareholder returns.\n\n### 2. Balance Sheet Highlights\nThe balance sheet reflects steady expansion and a strengthening capital base.\n\n* **Total Assets:** Total assets grew to **EUR 403,771 million** as of 30 September 2024, up from EUR 377,909 million at year-end 2023. This growth is primarily driven by an increase in **Loans and advances to customers**, which rose to **EUR 259,603 million**.\n* **Total Liabilities:** Total liabilities increased to **EUR 377,961 million**, largely supported by growth in \"Due to customers\" (EUR 262,712 million).\n* **Total Equity:** Equity has shown consistent growth, reaching **EUR 25,810 million** in Q3 24, up from EUR 24,168 million at the end of 2023.\n\n### 3. Credit Quality and Operational Performance\nOperational efficiency and risk management remain core focuses of the period.\n\n* **Operational Efficiency:** The **Cost/Income ratio** was **59.2%** in Q3 24, aligning closely with the group's strategic target of **approximately 60%**. This is a marked improvement from the 71.6% reported in Q4 23.\n* **Interest Margins:** The **Net Interest Margin (NIM)** continues to trend upward, reaching **165 bps** in Q3 24, up from 154 bps in Q3 23, suggesting a favorable environment for interest-based income.\n* **Credit Risk:** The **Cost of Risk** remained low and stable at **-2 bps** for Q3 24, following a period of significant volatility.\n\n### 4. Strategic and Operational Updates (Capital Adequacy)\nThe group maintains a robust capital position, well above regulatory requirements.\n\n* **CET1 Ratio (Basel IV):** Reported at **14%**, exceeding the strategic target of **13.5%**. *(Note: Q3 24 figures are pro-forma, including 50% of net profit per dividend policy).*\n* **CET1 Ratio (Basel III):** Remains strong at **14.1%**.\n* **Leverage Ratio (CRR2):** Increased to **5.5%**, indicating improved capital buffer strength compared to previous quarters.\n\n### 5. Market Conditions and Outlook\nThe upward trend in the Net Interest Margin and the steady growth in customer loans suggest a stable operating environment with resilient demand for credit. The management’s ability to keep the Cost/Income ratio near the 60% target suggests controlled operational scaling despite the expansion of the balance sheet.\n\n### 6. Identification of Risks and Anomalies\n* **Cost of Risk Volatility:** A significant anomaly was observed in **Q4 23**, where the Cost of Risk dropped to **-13 bps**. This indicates a substantial release of loan loss provisions, which may have artificially inflated profits during that specific quarter.\n* **Liquidity Shift:** There has been a notable decrease in **Cash and balances at central banks** (from EUR 53,656 million in Dec 23 to EUR 31,652 million in Sep 24), which appears to have been reallocated toward higher-yielding assets like loans and financial investments.\n* **Cost/Income Spikes:** The sharp spike in the Cost/Income ratio in **Q4 23 (71.6%)** should be noted as a period of temporary operational inefficiency or non-recurring costs."
+          },
+          "metadata": {}
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "name": "Welcome To Colab",
+      "provenance": [],
+      "gpuType": "T4",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "accelerator": "GPU"
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
